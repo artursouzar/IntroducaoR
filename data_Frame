@@ -1,0 +1,100 @@
+## Começando a estudar DataFrames
+install.packages('dplyr') #Biblioteca utilizada para dataframes
+library(dplyr)
+
+#Função para mudar a tabela == mutate
+murders <- mutate(murders, rate = total / population * 100000) #adicionando nova coluna na tabela de a cada 100.000 habitantes quantos assasinatos tem
+head(murders)
+
+#Função Filter
+filter(murders, rate <= 0.71) #Quantos estados tem a taxa de assasinato menor que 0.71
+
+#Função select
+new_table <- select(murders, state, region, rate) #Selecionando colunas de uma tabela e criando um novo Data Frame
+class(new_table)
+
+filter(new_table, rate <= 0.71) #Filtrando dentre as linhas da tabela quero filtrar
+
+#Função Pipe é como se fosse falar "pegar desse objeto tal coisa" ou select de murders as colunas state, region, rate.
+murders %>% select(state, region, rate) %>% filter(rate <= 0.71) #De murders seleciono 3 colunas e após isso filtro dessas 3 colunas as linhas que possuem uma média menor que 0.71 de mortes
+
+
+
+#Criando um novo DataFrame
+grades <- data.frame(names = c("Jao", "Jes", "Jo", "Ju"),
+                     exam_1 = c(95L, 80L, 90L, 85L), #Para transformar o número em inteiro podemos forçar através da coersão o número sair de númerico para inteiro
+                     exam_2 = c(90, 85, 85, 90))
+
+class(exam_1)
+class(grades$exam_1)
+class(grades$exam_2)
+class(grades$names)
+
+#Voltando ao exercicio anterior usando a base de dados de murders
+library('murders')
+install.packages("dslabs")
+library(dslabs)
+murders
+
+x <- c(88,100,83,92,94)
+rank(x)
+rank(-x)
+
+
+#Criando nova variável chamada rate para taxa de assasinatos para cada 100 mil habitantes
+rate <- (murders$total / murders$population * 100000)
+rate
+rank(rate)
+
+#Criando uma nova coluna na variavel de murders e rankeando da menor para a maior 
+murders <- mutate(murders, rank = rank(-rate))
+murders
+
+select(murders, state, abb)
+
+#Usando a função filter para mostrar os 5 principais estados com as maiores taxa de homicídio
+filter(murders, rank <= 5) #Filtrando murders com base no ranking que foi feito anteriormente então todos os estados que estiverem no top 5 serão os estados com as maiores taxas
+
+
+no_south <- filter(murders, region !="South")
+nrow(no_south)
+
+
+#Criando uma nova variável que tem o filtro de região Nordeste e Oeste 
+murders_nw <- filter(murders, region == "Northeast"| region == "West") 
+nrow(murders_nw)
+
+#Ou podemos usar essa forma
+murders_nw <- filter(murders, region %in% c("Northeast", "West"))
+nrow (murders_nw)
+
+#Procurando um local dentro do Nordeste e Oeste que tenha a taxa de homicídios menor que 
+murders_nw <-filter(murders, region %in% c("Northeast", "West"), rate <1)
+nrow(murders_nw)
+
+
+#Criando nova tabela que tenha a taxa dew homicídios e uma coluna de classifição de estados que estão no Nordeste ou Oeste e a taxa de homicídio seja menor que 1
+my_states <- filter(murders, region %in% c("Northheast", "West") & rate <1)
+select(my_states, state, rate, rank)
+
+
+#Resposta professor
+murders <- mutate(murders, rate = total / population * 100000, rank = rank(-rate))
+my_states <- filter(murders, region %in% c("Northeast", "West") & rate < 1)
+select(my_states, state, rate, rank)
+
+#Outra forma de alcançar
+mutate(murders_nw, rate <1)
+
+#Resposta usando pipe tem que adicionar os parâmetros
+mutate(murders, rate = total / population * 100000, rank = (-rate)) %>% select(state, rate, rank)
+
+
+data(murders)
+select(my_states, state, rate, rank)
+
+
+
+
+
+
