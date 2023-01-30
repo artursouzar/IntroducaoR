@@ -1,0 +1,92 @@
+library(dslabs)
+data(murders)
+library(dplyr)
+
+
+#Criando Eixo X
+x <- murders$population / 10^6
+
+#Criando Eixo Y
+y <- murders$total
+
+#Criando Gráfico de Dispersão
+plot(x, y)
+
+#Para maior quantidade de dados utilizar o histograma é interessante visto que ele leva em consideração a frequência
+
+murders <- mutate(murders, rate = total / population * 10^5)
+hist(murders$rate)
+
+#Gráfico Boxplot possível visualizar diversos dados em um único boxplot
+boxplot(rate~region,data = murders) #O "~" é basicamente eu pedindo rate por região
+
+#O boxplot é baseado em desvio padrão
+#Linha que fica dentro da caixa é = a média
+#A caixa é a dispersão 
+#As barras representam o limite maior e o limite menor
+
+#######
+
+#Exercícios
+library(dslabs)
+data(murders)
+population_in_millions <- murders$population/ 10^6
+total_gun_murders <- murders$total
+plot(population_in_millions, total_gun_murders)
+
+
+populations_in_millions <- (murders$population / 10^6)
+plot(log10(population_in_millions), log(total_gun_murders))
+
+
+
+#Criando Histograma 
+hist(populations_in_millions)
+murders <- mutate(murders, rate = total / population_in_millions)
+hist(murders$rate)
+#Função mutate acrescenta colunas ou variáveis a nossa base de dados inicial
+
+
+
+#Criando Boxplots - Nos ajuda a reduzir o volume de histogramas que deveriam ser feitos
+boxplot(population~region, data = murders)
+boxplot(rate^region, data = murders)
+
+
+#Sumarização de dados
+#É essencial para trabalhar com dados grandes, em especial: Mediana, média e desvio padrão
+
+
+#Calculando o minimo, média e máximo do rate dos estados da região Oeste
+murders <- mutate(murders, rate = total / populations * 10^5)
+s <- murders %>% filter(region == "West") %>%
+  summarize(minimum = min(rate), median = median(rate), maximum = max(rate))
+
+#Função Quantile/Aplicando Filtros
+murders %>% filter(region == "West") %>%
+  summarize(range = quantile(rate,c(0, 0.5, 1)))
+
+
+
+murders %>% filter(region == "West")
+
+
+min(murders$rate)
+max(murders_rate)
+
+murders %>% filter(region == "West") %>% summarize(min(rate))
+#ou
+min(murders$rate[c(murders$region == "West")])
+#ou
+min(murders$rate[murders$region == "West"])
+
+#Comando pull
+u_murder_rate <- murders %>% summarise(rate = sum(total)/sum(population) *10^5)
+
+u_murders_rate2 <- murders %>% summarise(rate = sum(total)/sum(population) *10^5) %>% pull(rate) #pull é uma função para pegar valores dentro de variáveis 
+
+u_murders_rate3 <- murders %>% summarise(rate = sum(total)/sum(population) *10^5) %>% .$(rate) #.$ é igual a pull
+
+
+
+
