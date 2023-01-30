@@ -1,0 +1,40 @@
+#Ordenando Data Frame com arrange
+murders %>% group_by(region) %>% summarise(median = median(rate)) 
+
+murders %>% arrange(population) %>% head()
+
+murders %>% arrange(rate) %>% head()
+
+murders %>% arrange(desc(rate)) %>% head()
+
+murders %>% arrange(region,rate) %>% head() #Ordena a região de acordo com o rate
+
+murders %>% top_n(10, rate) #Mostra os 10 primeiros de acordo com a ordem alfabética(padrão)
+
+murders %>% arrange(desc(rate)) %>% top_n(10) #Ordena pelo rate e depois disso mostra os 10 primeiros
+
+
+#Começando Data Table
+library(dplyr)
+library(dslabs)
+data(murders)
+install.packages("data.table")
+library(data.table)
+
+
+#Convertendo data.frame em data table
+murders <- setDT(murders)
+class(murders) #validando mudança
+
+#Selecionando as colunas state e region do data.table murders
+select(murders, state, region)
+
+#filtrando data.table a vírgula significa pegar todas as linhas e depois disso filtrando pelas colunas state e region
+murders[, c("state", "region")] |> head()
+murders[, .(state, region)] |> head()
+
+#Adicionando coluna usando mutate (dplyr)
+murders <- mutate(murders, rate = total / population*10^5)
+murders[, rate := total / population * 100000]
+murders[, ":="(rate = total / population * 100000, rank = rank(population))]
+x <- data.table
