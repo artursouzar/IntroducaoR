@@ -1,0 +1,56 @@
+#Gráficos com ggplot2
+
+install.packages("tidyverse")
+library(tidyverse)
+data(mpg)
+mpg
+str(mpg)
+?mpg
+
+str(mpg)
+
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy))
+#O mais representa que o cóidigo vai continuar na próxima linha
+#ggplot vai plotar a área do gráfico disponível
+#(data=mpg) é sobre o que vamos plotar nesse caso foi o mpg "miles per galoon"
+#Função geom_point adiciona uma camada de pontos ao gráfico, criando um gráfico de dispersão
+#Função aes seria a estética do gráfico ou seja eu quero que x seja a potência do motor e y seja hwy
+
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = cyl, y = hwy))
+#Utilizando outros parametros para saber nesse caso foram cilindradas por Autonomia na estrada
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = drv, y = class))
+#Utilizando outros parametros para saber nesse caso foram tipo de tração e tipo de carro (suv e etc)
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, color = class))
+#Plotando gráfico e adicionando mais um parametro trocando as classes diferenciando-as por cores
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+#Plotando gráfico e adicionando mais um parametro trocando as classes diferenciando-as pelo shape existe apenas um problemas pois só existem 6 shapes disponíveis então acaba cortando alguns dados
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, shape = class), size = 3)
+#Mesma coisa da linha de cima mas alterando o size depois de fechar o primeiro parenteses
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+#Plotando gráfico e adicionando mais um parametro trocando as classes diferenciando-os pela sua opacidade
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, size = class))
+#Plotando gráfico e adicionando mais um parametro trocando as classes diferenciando-os pelo seu tamanho
+
+ggplot(data=mpg) + geom_point(mapping = aes(x = displ, y = hwy, alpha = class), color = "blue")
+#Plotando gráfico e adicionando mais um parametro trocando as classes diferenciando-os pela sua opacidade e colocando em azul
+
+#Criando subgráficos ou facetas com ggplot2
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~ class, nrow = 3)
+
+#A primeira linha separa o espaço que será usada o + sinaliza que continurá na próxima linha
+#Na segunda linha sinaliza como será esse gráfico nesse caso pegou displ e hwy
+#Na última linha sinaliza como quer que mostre e separe em facetas ou seja mais gráficos (um para cada) e por fim o nrow para sinalizar que será em 2 linhas
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ cyl)
